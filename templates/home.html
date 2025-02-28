@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Score Prediction</title>
     <style>
-        /* Same CSS as before */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -39,7 +38,7 @@
             color: #555;
             font-weight: 500;
         }
-        select {
+        select, input[type="number"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -49,10 +48,17 @@
             cursor: pointer;
             transition: border-color 0.3s ease;
         }
-        select:focus {
+        select:focus, input[type="number"]:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        input[type="number"] {
+            -moz-appearance: textfield; /* Remove Firefox spinners */
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            opacity: 1; /* Show spinners in Chrome */
         }
         button {
             width: 100%;
@@ -136,6 +142,18 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="reading_score">Reading Score out of 100</label>
+                <input type="number" name="reading_score" id="reading_score" 
+                       placeholder="Enter your Reading score" min="0" max="100">
+            </div>
+
+            <div class="form-group">
+                <label for="writing_score">Writing Score out of 100</label>
+                <input type="number" name="writing_score" id="writing_score" 
+                       placeholder="Enter your Writing score" min="0" max="100">
+            </div>
+
             <button type="submit">Predict your Maths Score</button>
             <div id="result"></div>
         </form>
@@ -148,13 +166,26 @@
             const form = event.target;
             const formData = new FormData(form);
             
+            // Client-side validation for scores
+            const readingScore = formData.get('reading_score');
+            const writingScore = formData.get('writing_score');
+            const resultDiv = document.getElementById('result');
+
+            if (!readingScore || !writingScore || 
+                readingScore < 0 || readingScore > 100 || 
+                writingScore < 0 || writingScore > 100) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.color = '#ff4444';
+                resultDiv.textContent = 'Please enter valid scores between 0 and 100';
+                return;
+            }
+
             try {
                 const response = await fetch('/predictdata', {
                     method: 'POST',
                     body: formData
                 });
 
-                const resultDiv = document.getElementById('result');
                 const data = await response.json();
 
                 if (response.ok) {
@@ -167,7 +198,6 @@
                     resultDiv.textContent = data.error || 'An error occurred';
                 }
             } catch (error) {
-                const resultDiv = document.getElementById('result');
                 resultDiv.style.display = 'block';
                 resultDiv.style.color = '#ff4444';
                 resultDiv.textContent = 'Error connecting to server';
