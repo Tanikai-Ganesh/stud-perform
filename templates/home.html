@@ -45,7 +45,6 @@
             border-radius: 8px;
             font-size: 16px;
             background: #f9f9f9;
-            cursor: pointer;
             transition: border-color 0.3s ease;
         }
         select:focus, input[type="number"]:focus {
@@ -53,12 +52,14 @@
             border-color: #667eea;
             box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
         }
+        /* Ensure spinners are visible and styled consistently */
         input[type="number"] {
-            -moz-appearance: textfield; /* Remove Firefox spinners */
+            appearance: textfield; /* Standard property */
+            -webkit-appearance: textfield; /* For older Webkit browsers */
         }
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
-            opacity: 1; /* Show spinners in Chrome */
+            opacity: 1; /* Keep spinners visible in Webkit browsers */
         }
         button {
             width: 100%;
