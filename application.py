@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import os
 from sklearn.preprocessing import StandardScaler
-from src.pipeline.predict_pipeline import CustomData,PredictPipeline
+# from src.pipeline.predict_pipeline import CustomData,PredictPipeline
 
 application = Flask(__name__)
 
@@ -31,24 +31,24 @@ def predict_datapoint():
         if not all([gender, ethnicity, parental_education, lunch, test_prep,reading_score,writing_score]):
             return jsonify({'error': 'All fields are required'}), 400
 
-        data = CustomData(
-                gender,ethnicity,parental_education,lunch,test_prep,reading_score,writing_score
-        )
+        # data = CustomData(
+        #         gender,ethnicity,parental_education,lunch,test_prep,reading_score,writing_score
+        # )
         
 
-        pred_df=data.get_data_as_data_frame()
-        print(pred_df)
-        print("Before Prediction")
+        # pred_df=data.get_data_as_data_frame()
+        # print(pred_df)
+        # print("Before Prediction")
 
-        predict_pipeline=PredictPipeline()
-        print("Mid Prediction")
+        # predict_pipeline=PredictPipeline()
+        # print("Mid Prediction")
 
         # Demo prediction (replace with actual ML model logic)
-        predicted_score = predict_pipeline.predict(pred_df)
+        predicted_score = random.randint(0, 100) #predict_pipeline.predict(pred_df)
 
-        print("after Prediction")
+        # print("after Prediction")
         
-        return jsonify({'prediction': predicted_score[0]})
+        return jsonify({'prediction': predicted_score})
     
     return jsonify({'error': 'Method not allowed'}), 405
 
